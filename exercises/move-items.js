@@ -12,7 +12,7 @@
  */
 
 // Your code goes here...
-
+const allItems = document.getElementsByClassName('item');
 
 
 /**
@@ -23,7 +23,7 @@
  * */
 
 // Your code goes here
-
+const main = document.getElementById('main');
 
 
 /**
@@ -34,7 +34,7 @@
  */
 
 // Your code goes here
-
+const favs = document.getElementById('favs');
 
 
 /**
@@ -47,7 +47,31 @@
  */
 
 // Your code goes here
-
+function updateCollections(index, direction) {
+  let fromParent = null;
+  let toParent = null;
+  let newClass = '';
+  switch (direction) {
+    case 'toMain':
+      fromParent = favs;
+      newClass = 'fa-solid fa-heart-circle-plus';
+      toParent = main;
+      break;
+    case 'toFavs':
+      fromParent = main;
+      newClass = 'fa-solid fa-heart-crack';
+      toParent = favs;
+      break;
+    default:
+      break;
+  }
+  const nodeList = fromParent.getElementsByClassName('item');
+  let child = nodeList[index];
+  child = fromParent.removeChild(child);
+  const icon = child.firstChild;
+  icon.className = newClass;
+  toParent.appendChild(child);
+}
 
 
 /**
@@ -65,5 +89,13 @@
  */
 
 // Your code goes here...
-
-
+const arrayItems = Array.from(allItems);
+arrayItems.forEach((item) => item.addEventListener('click', function() {
+  const parentNode = item.parentNode;
+  const index = Array.prototype.indexOf.call(parentNode.children, item);
+  let direction = 'toMain';
+  if (parentNode.id == 'main') {
+    direction = 'toFavs';
+  }
+  updateCollections(index, direction);
+}));

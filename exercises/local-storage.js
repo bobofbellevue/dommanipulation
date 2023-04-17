@@ -38,3 +38,58 @@
  */
 
 // Your code goes here...
+const keyFavorites = 'favorites';
+const cardClass = 'card';
+
+function addIdToFavorites(id) {
+  let data = localStorage.getItem(keyFavorites);
+  if (data) {
+    data += ',' + id;
+  }
+  else {
+    data = id;
+  }
+  localStorage.setItem(keyFavorites, data);
+}
+
+function deleteIdFromFavorites(id) {
+  const arrayFavorites = localStorage.getItem(keyFavorites).split(',');
+  arrayFavorites.splice(arrayFavorites.indexOf(id), 1).join(',');
+  localStorage.setItem(keyFavorites, arrayFavorites);
+}
+
+const setColor = (event) => {
+  const item = event.target;
+  if (! Array.from(item.classList).includes(cardClass)) {
+    return;
+  }
+  const data = localStorage.getItem(keyFavorites)
+  if (data) {
+    const arrayFavorites = data.split(',');
+    if (Array.from(arrayFavorites).includes(item.id)) {
+      item.style.backgroundColor = 'white';
+      deleteIdFromFavorites(item.id);
+      return;
+    }
+  }
+  item.style.backgroundColor = 'red';
+  addIdToFavorites(item.id);
+}
+
+function initializeFavorites(container) {
+  const data = localStorage.getItem(keyFavorites);
+  if (data) {
+    const arrayFavorites = localStorage.getItem(keyFavorites).split(',');
+    const collection = document.getElementsByClassName(cardClass);
+    const arrayItems = Array.from(collection);
+    for (let i=0; i < arrayItems.length; i++) {
+      const item = arrayItems[i];
+      if (arrayFavorites.includes(item.id)) {
+	item.style.backgroundColor = 'red';
+      }
+    }
+  }
+  container.addEventListener('click', setColor);
+}
+
+initializeFavorites(document.getElementsByClassName('cardsContainer')[0]);
