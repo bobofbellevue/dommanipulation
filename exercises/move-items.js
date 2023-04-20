@@ -65,10 +65,11 @@ function updateCollections(index, direction) {
     default:
       break;
   }
-  const nodeList = fromParent.getElementsByClassName('item');
+  let nodeList = fromParent.getElementsByClassName('item');
   let child = nodeList[index];
   child = fromParent.removeChild(child);
-  const icon = child.firstChild;
+  nodeList = child.getElementsByClassName('fa-solid');
+  const icon = nodeList[0];
   icon.className = newClass;
   toParent.appendChild(child);
 }
